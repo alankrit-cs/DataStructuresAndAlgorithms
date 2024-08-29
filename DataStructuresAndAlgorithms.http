@@ -1,0 +1,6 @@
+@DataStructuresAndAlgorithms_HostAddress = http://localhost:5109
+
+GET {{DataStructuresAndAlgorithms_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
