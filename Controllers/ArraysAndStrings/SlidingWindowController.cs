@@ -14,7 +14,7 @@ namespace DataStructuresAndAlgorithms.Controllers.ArraysAndStrings
         {
             int left = 0, ans = 0, curr = 0;
 
-            for(int right = 0; right < nums.Count; right++)
+            for (int right = 0; right < nums.Count; right++)
             {
                 curr = curr + nums[right];
 
@@ -37,14 +37,14 @@ namespace DataStructuresAndAlgorithms.Controllers.ArraysAndStrings
         {
             int left = 0, curr = 0, ans = 0;
 
-            for(int right = 0; right<str.Length; right++)
+            for (int right = 0; right < str.Length; right++)
             {
                 if (str[right] == '0')
                 {
                     curr = curr + 1;
                 }
 
-                while(curr > 1)
+                while (curr > 1)
                 {
                     if (str[left] == '0')
                     {
@@ -55,6 +55,58 @@ namespace DataStructuresAndAlgorithms.Controllers.ArraysAndStrings
 
                 ans = Math.Max(ans, right - left + 1);
             }
+            return Ok(ans);
+        }
+
+        [HttpPost("NumSubarrayProductLessThanK")]
+        [SwaggerOperation(Summary = "Given an array of positive integers nums and an integer k, return the number of subarrays where the product of all the elements in the subarray is strictly less than k",
+        Description = "For example, given the input nums = [10, 5, 2, 6], k = 100, the answer is 8. The subarrays with products less than k are:\r\n\r\n[10], [5], [2], [6], [10, 5], [5, 2], [2, 6], [5, 2, 6]")]
+        public IActionResult NumSubarrayProductLessThanK([FromBody] List<int> nums, int k)
+        {
+            if (k <= 1)
+            {
+                return Ok(0);
+            }
+
+            int ans = 0, left = 0, curr = 1;
+
+            for (int right = 0; right < nums.Count; right++)
+            {
+                curr = curr * nums[right];
+
+                while (curr >= k)
+                {
+                    curr = curr / nums[left];
+
+                    left++;
+                }
+
+                ans = ans + (right - left + 1);
+            }
+
+            return Ok(ans);
+        }
+
+        [HttpPost("FindBestSubarray")]
+        [SwaggerOperation(Summary = "Given an integer array nums and an integer k, find the sum of the subarray with the largest sum whose length is k")]
+        public IActionResult FindBestSubarray([FromBody] List<int> nums, int k)
+        {
+            int curr = 0;
+
+            for(int i = 0; i<k; i++)
+            {
+                curr = curr + nums[i];
+            }
+
+            int ans = curr; 
+
+            for(int i = k; i < nums.Count; i++)
+            {
+                curr = curr + nums[i] - nums[i - k];
+
+                ans = Math.Max(curr, ans);
+            }
+
             return Ok(ans);
         }
     }
